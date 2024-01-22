@@ -6,7 +6,7 @@ class TrainDataTransform:
     def __init__(self, df):
         self.df = df
 
-    def TrainDataTransform(self):
+    def transform(self):
         self.is_weekend()
         return self.df
 
@@ -20,7 +20,7 @@ class DataStorageTransform:
     def __init__(self, df):
         self.df = df
 
-    def DataStorageTransform(self):
+    def transform(self):
         self.electricity_prices_to_positive()
         self.wind_data_to_UV()
         return self.df
