@@ -4,4 +4,4 @@ Participated in Kaggle competition [**Enefit**](https://www.kaggle.com/competiti
 
 First small project in 2024.
 
-members :  @[Lim-Kim](https://github.com/yelim421) @[Juwon-moon](https://github.com/Juwon-Moon) @[JunYong](https://github.com/wnsdyd6830)
+members :  @[Lim-Kim](https://github.com/yelim421) @[Juwon-moon](https://github.com/Juwon-Moon) @[JoonYong](https://github.com/wnsdyd6830)
