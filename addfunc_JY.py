@@ -34,6 +34,6 @@ class DataStorageTransform:
     #historical wind speend & direction data to U10, V10
     def wind_data_to_UV(self):
         self.df.df_historical_weather = self.df.df_historical_weather.with_columns(
-            (self.df.df_historical_weather['windspeed_10m'] * np.cos(np.radians(270 - data_storage.df_historical_weather['winddirection_10m']))).alias('U10'),
-            (self.df.df_historical_weather['windspeed_10m'] * np.sin(np.radians(270 - data_storage.df_historical_weather['winddirection_10m']))).alias('V10')
+            (self.df.df_historical_weather['windspeed_10m'] * np.cos(np.radians(270 - self.df.df_historical_weather['winddirection_10m']))).alias('U10'),
+            (self.df.df_historical_weather['windspeed_10m'] * np.sin(np.radians(270 - self.df.df_historical_weather['winddirection_10m']))).alias('V10')
             )
