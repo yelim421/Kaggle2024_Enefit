@@ -14,15 +14,14 @@ class DataTransformer:
 
     def transform(self):
         self.add_season()
-        self.add_daypart()
+        self.add_daypart_with_sin_hour()
         self.add_feels_like_temperature()
-        self.add_total_precipitation()
         self.add_energy_usage_trend()
         self.add_temp_change()
         self.add_prec_change()
         self.add_autocorr_features()
         self.add_energy_price_volatility_and_trend()
-        self.perform_clustering()
+        #self.perform_clustering()
         self.analyze_transit_and_charging_access()
         return self.df
 
@@ -39,18 +38,14 @@ class DataTransformer:
         
         self.df['season'] = self.df['month'].apply(get_season)
 
-    def add_daypart(self):
-        def get_daypart(hour):
-            if 5 <= hour < 12:
-                return 1 #morning
-            elif 12 <= hour < 17:
-                return 2 #'Afternoon'
-            elif 17 <= hour < 21:
-                return 3 #Evening'
+    def add_daypart_with_sin_hour(self):
+        def get_daypart(sin_hour):
+            if sin_hour > 0:
+                return 'Morning/Afternoon'  # sin(hour) 양수: 오전~오후
             else:
-                return 4 #'Night'
-        
-        self.df['daypart'] = self.df['hour'].apply(get_daypart)
+                return 'Evening/Night'      # sin(hour) 음수: 저녁~밤
+
+        self.df['daypart'] = self.df['sin(hour)'].apply(get_daypart)
 
     def add_feels_like_temperature(self):
         def calculate_feels_like(T, u, v):
@@ -62,8 +57,6 @@ class DataTransformer:
 
         self.df['feels_like_temp'] = self.df.apply(lambda row: calculate_feels_like(row['temperature'], row['10_metre_u_wind_component'], row['10_metre_v_wind_component']), axis=1)
 
-    def add_total_precipitation(self):
-        self.df['total_precipitation'] = self.df['snow'] + self.df['rain'] + self.df['preci']
 
     def add_energy_usage_trend(self, period = 7):
         self.df['energy_trend'] = self.df['target'].rolling(window = period).mean()
@@ -84,14 +77,14 @@ class DataTransformer:
     def add_energy_price_volatility_and_trend(self, window = 7):
         self.df['energy_price_volatility'] = self.df['target'].rolling(window = window).std()
 
-    def perform_clustering(self, n_clusters = 3, features = None):
-        if features is None:
-            features = ['target_24h', 'target_48h', 'temperature', 'cloudcover_total']
-        scaler = StandardScaler()
-        scaled_data = scaler.fit_transform(self.df[features])
+    # def perform_clustering(self, n_clusters = 3, features = None):
+    #     if features is None:
+    #         features = ['target_24h', 'target_48h', 'temperature', 'cloudcover_total']
+    #     scaler = StandardScaler()
+    #     scaled_data = scaler.fit_transform(self.df[features])
 
-        kmeans = KMeans(n_clusters=n_clusters, random_state=42)
-        self.df['cluster'] = kmeans.fit_predict(scaled_data)
+    #     kmeans = KMeans(n_clusters=n_clusters, random_state=42)
+    #     self.df['cluster'] = kmeans.fit_predict(scaled_data)
 
     def analyze_transit_and_charging_access(self):
 
