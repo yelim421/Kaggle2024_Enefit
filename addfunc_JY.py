@@ -19,19 +19,4 @@ class TrainDataTransform:
         self.df['U10'] = self.df['windspeed_10m'] * np.cos(np.radians(270 - self.df['winddirection_10m']))
         self.df['V10'] = self.df['windspeed_10m'] * np.sin(np.radians(270 - self.df['winddirection_10m']))
         
-
-
-#DataStorage data 변환 (electricity price 음수값 양수로 변환)
-class DataStorageTransform:
-    def __init__(self, df):
-        self.df = df
-
-    def transform(self):
-        self.electricity_prices_to_positive()
-        return self.df
-    
-    #elecrricity prices 음수값 양수로 바꾸는 함수
-    def electricity_prices_to_positive(self):
-        self.df.df_electricity_prices = self.df.df_electricity_prices.with_columns(
-            self.df.df_electricity_prices['euros_per_mwh'].abs().alias('euros_per_mwh'))
         
